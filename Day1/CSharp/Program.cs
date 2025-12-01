@@ -1,5 +1,5 @@
 ﻿// Import inputs
-string[] lines = File.ReadAllLines("Day1\\input.txt");
+string[] lines = File.ReadAllLines("Day1\\CSharp\\input.txt");
 
 // Initialize part one dial - Size 100 to allow for 0-99 positions, starting position is 50
 var partOne = new dial.Dial(100, 50);

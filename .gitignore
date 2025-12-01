@@ -1,4 +1,4 @@
 *.txt
-*/bin/
-*/obj/
+**/bin/
+**/obj/
 *.log
