@@ -24,6 +24,7 @@ public class IdCheck
     this.sumOfInvalidIds = AddAllInvalid(this.partOneInvalidIds, this.partTwoInvalidIds);
   }
 
+  // Part One: IDs with an even number of digits where the first half matches the second half - Irrelevant after adding part 2 as when solving part 2 this covers those cases anyways
   public long[] GetPartOneInvalidIds(long[] idRange)
   {
     var hashSet = new HashSet<long>();
@@ -43,6 +44,7 @@ public class IdCheck
     return hashSet.ToArray();
   }
 
+  // Part Two: Looks for any repeating patterns in the ID up to half the length of the ID (Part one), if the full ID is made up of repeating patterns, add it to the invalid IDs list
   public long[] GetPartTwoInvalidIds(long[] idRange)
   {
     var hashSet = new HashSet<long>();
@@ -78,6 +80,7 @@ public class IdCheck
     return hashSet.ToArray();
   }
 
+  // Added the check for Part Two invalid IDs purely to keep my solution from part one in the code here rather than removing it, just as a reference point for the future
   public long AddAllInvalid(long[] partOneInvalidIds, long[]? partTwoInvalidIds = null)
   {
     if (partTwoInvalidIds == null)
