@@ -61,15 +61,17 @@ public class IdCheck
           continue;
         }
 
-        // Store found pattern in var
+        // Store attempted pattern 
         string pattern = id.ToString().Substring(0, i);
 
+        // Build full string from pattern
         var stringBuilder = new System.Text.StringBuilder();
         for (int j = 0; j < idLength / i; j++)
         {
           stringBuilder.Append(pattern);
         }
 
+        // If built string matches ID, it's invalid
         if (stringBuilder.ToString() == id.ToString())
         {
           hashSet.Add(id);
