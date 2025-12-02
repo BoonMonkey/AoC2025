@@ -2,3 +2,6 @@
 **/bin/
 **/obj/
 *.log
+**/node_modules/
+**/package-lock.json
+**/__pycache__/
