@@ -7,22 +7,22 @@ string inputFile = File.ReadAllText("Day3\\input.txt");
 string[] inputs = inputFile.Split("\r\n");
 
 // Total output joltage
-int totalJoltage = 0;
+long partOneJoltage = 0;
+long partTwoJoltage = 0;
 
+// Part one
 foreach (string input in inputs)
 {
-  var bank = new Joltage(input);
-
-  // Debugging steps, commented out for main run
-  // Console.WriteLine($"Processing bank: {bank.bank}");
-  // Console.WriteLine($"Joltage ratings: {string.Join(",", bank.joltageRatings)}");
-  // Console.WriteLine($"Joltage ratings length: {bank.joltageRatings.Length}");
-  // Console.WriteLine($"Possible left joltages: {string.Join(",", bank.possibleJoltages["left"])}");
-  // Console.WriteLine($"Possible right joltages: {string.Join(",", bank.possibleJoltages["right"])}");
-  
-  // Console.WriteLine($"Highest Joltage for bank {bank.bank}: {bank.highestJoltage}");
-
-  totalJoltage += bank.highestJoltage;
+  var bank = new Joltage(input, 2);
+  partOneJoltage += bank.highestJoltage;
 }
 
-Console.WriteLine($"Total Joltage from all banks: {totalJoltage}");
+// Part two
+foreach (string input in inputs)
+{
+  var bank = new Joltage(input, 12);
+  partTwoJoltage += bank.highestJoltage;
+}
+
+Console.WriteLine($"Part one - Total Joltage from all banks: {partOneJoltage}");
+Console.WriteLine($"Part two - Total Joltage from all banks: {partTwoJoltage}");

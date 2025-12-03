@@ -3,75 +3,52 @@ namespace Day3;
 public class Joltage
 {
   public string bank;
-  public int minJoltage;
-  public int maxJoltage;
-  public char[] joltageRatings;
-  public Dictionary<string, char[]> possibleJoltages;
-  public int highestJoltage;
+  public long highestJoltage;
 
-  public Joltage(string bank)
+  public Joltage(string bank, int batteryCount)
   {
     this.bank = bank;
-    this.minJoltage = 1;
-    this.maxJoltage = 9;
-    this.joltageRatings = GetBankJoltages();
-    this.possibleJoltages = GetPossibleJoltages();
-    this.highestJoltage = GetHighestJoltage();
-  }
-
-  // Using extension member to get char array of bank joltages
-  public char[] GetBankJoltages() => bank.ToArray();
-
-  // I could just do this in the GetPossibleJoltages method as part of initializing the dictionary, but I wanted to test out extension members a bit further for practice
-  public char[] FindLeftJoltage() => joltageRatings[0..(joltageRatings.Length - 1)];
-
-  // Get possible left and right joltages
-  public Dictionary<string, char[]> GetPossibleJoltages()
-  {
-    var possibleJoltages = new Dictionary<string, char[]>
-    {
-      { "left", FindLeftJoltage() },
-      { "right", joltageRatings }
-    };
-    return possibleJoltages;
+    this.highestJoltage = GetHighestJoltage(batteryCount);
   }
   
-  public int GetHighestJoltage()
+  public long GetHighestJoltage(int batteryCount)
   {
-    // Length of possible joltages -1 to avoid including the last element since right will need to be --something-- at least
-    int possibleJoltageLength = joltageRatings.Length - 1;
+    // Bank split into list to allow easier manipulation
+    List<char> bankList = bank.ToList();
 
-    // Actually using tuples for something for once??? Probably don't need to, but feels nice to have a use case for em
-    (int index, int value) highestLeft = (0, 0);
-    (int index, int value) highestRight = (0, 0);
+    // Second list to store batteries as they are enabled
+    List<char> enabledBatteries = new List<char>();
 
-    // Loop left first
-    for (int i = 0; i < possibleJoltageLength; i++)
+    // Count of batteries to be disabled
+    int disableCounter = bankList.Count - batteryCount;
+
+    // Loop through each battery in the bank
+    foreach (var battery in bankList)
     {
-      // Checking if current left joltage is higher than the first left joltage
-      if (int.Parse(possibleJoltages["left"][i].ToString()) > highestLeft.value)
+      // If batteries to be disabled is greater than 0
+      // And enabled batteries isn't empty
+      // And the current battery is greater than the last enabled battery
+      while (disableCounter > 0 && enabledBatteries.Count > 0 && battery > enabledBatteries[^1])
       {
-        // When it IS higher, store the index and the value
-        highestLeft = (i, int.Parse(possibleJoltages["left"][i].ToString()));
+        // Remove the last enabled battery
+        enabledBatteries.Remove(enabledBatteries[^1]);
 
-        // And also set the possible right joltages to be everything AFTER the current stored left index
-        possibleJoltages["right"] = joltageRatings[(i + 1)..];
+        // Decrease the disable counter as we've disabled a battery
+        disableCounter--;
       }
+
+      // Add the current battery to the enabled batteries list
+      enabledBatteries.Add(battery);
     }
 
-    // Then loop right joltages
-    for (int i = 0; i < possibleJoltages["right"].Length; i++)
+    // If disabledCounter still has some wiggle room, remove batteries from the end until
+    // we reach the desired battery count, this allows for this solution to work for part one as well
+    while (enabledBatteries.Count > batteryCount)
     {
-      if (int.Parse(possibleJoltages["right"][i].ToString()) > highestRight.value)
-      {
-        // Same logic, but store in right tuple
-        highestRight = (i, int.Parse(possibleJoltages["right"][i].ToString()));
-      }
+      enabledBatteries.Remove(enabledBatteries[^1]);
     }
 
-    // Concatenate highest left and right values to get overall highest joltage
-    highestJoltage = int.Parse(highestLeft.value.ToString() + highestRight.value.ToString());
-
-    return highestJoltage;
+    // Return the concatenated enabled batteries as a long (int is too small for this)
+    return long.Parse(string.Join("", enabledBatteries));
   }
 }
