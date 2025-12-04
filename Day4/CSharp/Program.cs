@@ -1,4 +1,5 @@
 ﻿using Day4;
+using System.Diagnostics;
 
 // Import inputs
 string inputFile = File.ReadAllText("Day4\\input.txt");
@@ -13,6 +14,10 @@ var paperGrid = new PaperGrid();
 // Initialize item to find
 char itemToFind = '@';
 var totalAccessibleItems = 0;
+var totalRemovedRolls = 0;
+
+// Create stopwatch for performance measurement
+Stopwatch stopwatch = new Stopwatch();
 
 foreach (var input in inputs)
 {
@@ -24,42 +29,35 @@ foreach (var input in inputs)
   }
 }
 
-foreach (var key in paperGrid.gridLocations.Keys)
-{
-  // Skip over items that we don't care about
-  if (paperGrid.gridLocations[key].itemToFind != itemToFind)
-  {
-    continue;
-  }
 
-  var adjacentLocations = paperGrid.GetAdjacentLocations(key.x, key.y);
-  // Console.WriteLine($"There are {adjacentLocations.Count} adjacent locations to ({key.x}, {key.y})");
-  var adjacentPaperRolls = 0;
-  foreach (var location in adjacentLocations)
-  {
-    // If the key exists in the dictionary and the value matches the item to find, increase the adjacenet paper roll count
-    if (paperGrid.gridLocations.ContainsKey((location.x, location.y)) && paperGrid.gridLocations[(location.x, location.y)].itemToFind == itemToFind)
-    {
-      adjacentPaperRolls++;
-    }
-  }
+// Part 1 - Determine accessible items
+stopwatch.Start();
 
-  // If there are less than 4 adjacent paper rolls, mark this as assessible, default is to mark as false so this SHOULD allow us to only count the accessible ones
-  if (adjacentPaperRolls < 4)
-  {
-    paperGrid.UpdateAccessible(key.x, key.y, true);
-  }
-}
+totalAccessibleItems = paperGrid.AccessibleRolls();
 
-// Loop through all grid locations again and count the accessible items
-foreach (var key in paperGrid.gridLocations.Keys)
-{
-  if (paperGrid.gridLocations[key].itemToFind == itemToFind && paperGrid.gridLocations[key].accessible)
-  {
-    totalAccessibleItems++;
-  }
-}
+stopwatch.Stop();
 
 Console.WriteLine($"Total accessible '{itemToFind}' items: {totalAccessibleItems}");
+Console.WriteLine($"Time taken for Part 1: {stopwatch.ElapsedMilliseconds} ms");
 
+// Part 2 - Remove accessible items until none are left, updating accessibility as we g
+stopwatch.Start();
 
+while (totalAccessibleItems > 0)
+{
+  foreach (var key in paperGrid.gridLocations.Keys)
+  {
+    if (paperGrid.RollExists(key.x, key.y, itemToFind) && paperGrid.gridLocations[key].accessible)
+    {
+      paperGrid.RemoveRoll(key.x, key.y);
+      totalRemovedRolls++;
+
+      // After removing a roll, we need to re-evaluate accessibility for all rolls
+      totalAccessibleItems = paperGrid.AccessibleRolls();
+    }
+  }
+}
+
+stopwatch.Stop();
+Console.WriteLine($"Total removed '{itemToFind}' items: {totalRemovedRolls}");
+Console.WriteLine($"Time taken for Part 2: {stopwatch.ElapsedMilliseconds} ms");

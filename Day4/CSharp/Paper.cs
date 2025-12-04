@@ -42,6 +42,11 @@ public class PaperGrid
     gridLocations[(xCoord, yCoord)] = (currentValue.itemToFind, isAccessible);
   }
 
+  public void RemoveRoll(int xCoord, int yCoord)
+  {
+    gridLocations[(xCoord, yCoord)] = ('.', false);
+  }
+
   public List<(int x, int y)> GetAdjacentLocations(int xCoord, int yCoord)
   {
     // Check all adjacent items N, NE, NW, S, SE, SW, E, W
@@ -58,6 +63,63 @@ public class PaperGrid
     };
 
     return adjacentLocations;
+  }
+
+  public bool ValidLocation(int xCoord, int yCoord)
+  {
+    return gridLocations.ContainsKey((xCoord, yCoord));
+  }
+
+  public bool RollExists(int xCoord, int yCoord, char itemToFind)
+  {
+    if (gridLocations[(xCoord, yCoord)].itemToFind == itemToFind)
+    {
+      return true;
+    }
+    return false;
+  }
+
+  public int AccessibleRolls()
+  {
+    // Initialize item to find
+    char itemToFind = '@';
+    var totalAccessibleItems = 0;
+
+    foreach (var key in gridLocations.Keys)
+    {
+      // Skip over items that we don't care about
+      if (RollExists(key.x, key.y, itemToFind) == false)
+      {
+        continue;
+      }
+
+      var adjacentLocations = GetAdjacentLocations(key.x, key.y);
+      var adjacentPaperRolls = 0;
+      foreach (var location in adjacentLocations)
+      {
+        // If the key exists in the dictionary and the value matches the item to find, increase the adjacenet paper roll count
+        if (ValidLocation(location.x, location.y) && RollExists(location.x, location.y, itemToFind))
+        {
+          adjacentPaperRolls++;
+        }
+      }
+
+      // If there are less than 4 adjacent paper rolls, mark this as accessible, default is to mark as false so this SHOULD allow us to only count the accessible ones
+      if (adjacentPaperRolls < 4)
+      {
+        UpdateAccessible(key.x, key.y, true);
+      }
+    }
+
+    // Loop through all grid locations again and count the accessible items
+    foreach (var key in gridLocations.Keys)
+    {
+      if (RollExists(key.x, key.y, itemToFind) && gridLocations[key].accessible)
+      {
+        totalAccessibleItems++;
+      }
+    }
+    return totalAccessibleItems;
   }
 }
 
@@ -84,3 +146,21 @@ public class PaperGrid
 
 // Firth update:
 // Added a bool to the dictionary value tuple to indicate if the item has been marked as accessible, this should help us avoid double counting items since my current return is 34 as opposed to the example 13
+
+// Part one solved with the accessible marking :D
+
+// Part two thoughts:
+// I'm thinking I can add a method to replace a roll (@) with an empty marker (.) similar to what the input has already, which should mean they get skipped by the logic I already added, the recursion of this will be the tricky part
+// Going to start by trying to move some of the logic from program.cs to PaperGrid to keep things tidy
+
+// Sixth update:
+// Added RemoveRoll method to PaperGrid to replace an item with a '.'
+// Moved logic from Program.cs to PaperGrid for part one logic, added a PartOne method for now, will need to tidy this up later
+
+// Seventh update:
+// Broke out the out the logic from part one into it's own method AccessibleRolls and some of the logic from there into helper methods
+
+// Eighth update:
+// Using a while loop against the total accessible to remove accessible items until none are left, constantly updating the accessibility after each removal
+
+// Part two solved but it's SLOW as hell
