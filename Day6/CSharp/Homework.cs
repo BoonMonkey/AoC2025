@@ -140,15 +140,62 @@ public class Homework
     Console.WriteLine($"Total from all column values: {totalFromColumnValues}");
   }
 
-  public void PartTwoColumnMath()
+  public void PartTwo()
   {
-    var columnToProcess = _columns.Count;
-    foreach (var column in _columns)
+    string[][] grid = new string[_inputLines.Length][]; 
+    Dictionary<(int y, int x), string> gridDict = new Dictionary<(int y, int x), string>();
+    for (int i = 0; i < _inputLines.Length; i++)
     {
-      for (int i = 0; i < column.Length; i++)
+      grid[i] = _inputLines[i].Select(c => c.ToString()).ToArray();
+    }
+
+    Console.WriteLine("Grid representation for Part Two:");
+    foreach (var row in grid)
+    {
+      Console.WriteLine(string.Join(",", row));
+    }
+
+    for (int row = 0; row < grid.Length; row++)
+    {
+      for (int col = 0; col < grid[row].Length; col++)
       {
-        Console.Write($"{column}"); // Print each number in the column followed by a space
+        gridDict[(row, col)] = grid[row][col];
       }
+    }
+
+    Console.WriteLine("Grid Dictionary representation for Part Two:");
+    foreach (var item in gridDict)
+    {
+      if (gridDict[item.Key] == " ")
+      {
+        gridDict.Remove(item.Key);
+        continue;
+      }
+      Console.WriteLine($"Position: {item.Key}, Value: {item.Value}");
+    }
+
+    int rowCount = gridDict.Keys.Max(k => k.y);
+    int colCount = gridDict.Keys.Max(k => k.x);
+    var columns = new Queue<string>();
+
+    for (int col = colCount; col >= 0; col--)
+    {
+      var columnValues = new List<string>();
+      for (int row = 0; row <= rowCount; row++)
+      {
+        if (gridDict.ContainsKey((row, col)))
+        {
+          columnValues.Add(gridDict[(row, col)]);
+        }
+      }
+      var columnString = string.Join("", columnValues);
+      columns.Enqueue(columnString);
+    }
+
+    Console.WriteLine($"Queue representation of columns for Part Two:");
+    foreach (var item in columns)
+    {
+      Console.WriteLine(item);
     }
   }
 }

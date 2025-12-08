@@ -7,4 +7,4 @@ homework.PartOneColumnMath();
 
 homework = new Day6.Homework(inputLines, "partTwo");
 Console.WriteLine($"Total columns in queue: {homework.Columns.Count}");
-homework.PartTwoColumnMath();
+homework.PartTwo();
