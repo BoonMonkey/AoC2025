@@ -2,12 +2,13 @@ namespace Day9;
 
 public class Cinema
 {
-  private List<(int X, int Y)> _seats;
+  private List<(int X, int Y)> _redSeats;
+  private List<(int X, int Y)> _greenSeats;
   public record SeatResult((int X, int Y) SeatA, (int X, int Y) SeatB, long Area);
 
   public Cinema(string[] input)
   {
-    _seats = ProcessSeats(input);
+    _redSeats = ProcessSeats(input);
     var result = GetLargestArea();
     PrintResult(result);
   }
@@ -26,12 +27,12 @@ public class Cinema
     (int X, int Y) SeatA = (0, 0);
     (int X, int Y) SeatB = (0, 0);
 
-    for (int i = 0; i < _seats.Count; i++)
+    for (int i = 0; i < _redSeats.Count; i++)
     {
-        for (int j = 0; j < _seats.Count; j++)
+        for (int j = 0; j < _redSeats.Count; j++)
         {
-            var seatA = _seats[i];
-            var seatB = _seats[j];
+            var seatA = _redSeats[i];
+            var seatB = _redSeats[j];
 
             long width = Math.Abs(seatA.X - seatB.X) + 1;
             long height = Math.Abs(seatA.Y - seatB.Y) + 1;
