@@ -9,7 +9,6 @@ public class Factory
   {
       _inputLines = inputLines;
       _machineList = BuildMachines();
-      PrintMachines();
   }
 
   public List<Machine> BuildMachines()
@@ -52,19 +51,19 @@ public class Factory
     foreach (var machine in _machineList)
     {
       Console.WriteLine("Machine Details:");
-      Console.WriteLine($"  Initial Light Diagram: {new string(machine.initialLightDiagram)}");
-      Console.WriteLine($"  Desired Light Diagram: {new string(machine.desiredLightDiagram)}");
-      Console.WriteLine($"  Button Count: {machine.buttonCount}"); 
+      Console.WriteLine($"  Initial Light Diagram: {new string(machine.InitialLightDiagram)}");
+      Console.WriteLine($"  Desired Light Diagram: {new string(machine.DesiredLightDiagram)}");
+      Console.WriteLine($"  Button Count: {machine.ButtonCount}"); 
       Console.WriteLine($"  Button Wiring Schematics:");
-      foreach (var buttonWiring in machine.buttonWiringSchematics)
+      foreach (var buttonWiring in machine.ButtonWiringSchematics)
       {
         Console.WriteLine($"    - {string.Join(", ", buttonWiring)}");
       }
-      Console.WriteLine($"  Joltage Requirements: {string.Join(", ", machine.joltageRequirements)}");
+      Console.WriteLine($"  Joltage Requirements: {string.Join(", ", machine.JoltageRequirements)}");
       Console.WriteLine(); // Blank line for better readability between machines
 
       machine.FindMatchingCombination();
-      Console.WriteLine($"  Current Light Diagram after matching: {new string(machine.currentLightDiagram)}");
+      Console.WriteLine($"  Current Light Diagram after matching: {new string(machine.CurrentLightDiagram)}");
     }
   }
 }

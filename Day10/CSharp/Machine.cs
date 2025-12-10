@@ -4,21 +4,23 @@ namespace Day10;
 
 public class Machine
 {
-  public char[] initialLightDiagram { get; private set; } // Array of . and # characters | . = off, # = on | This represents the initial pattern
-  public char [] currentLightDiagram { get; private set; } // Array of . and # characters | . = off, # = on | This represents the current pattern during operation
-  public char[] desiredLightDiagram { get; private set; } // Array of . and # characters | . = off, # = on | This represents the desired pattern | Default is all off
-  public int buttonCount { get; private set; } // Number of buttons on the machine
-  public int[][] buttonWiringSchematics { get; private set; } // Array which indicates which lights each button toggles
-  public int[] joltageRequirements { get; private set; } // Not needed for part one, but included for completeness
+  public char[] InitialLightDiagram { get; private set; } // Array of . and # characters | . = off, # = on | This represents the initial pattern
+  public char [] CurrentLightDiagram { get; private set; } // Array of . and # characters | . = off, # = on | This represents the current pattern during operation
+  public char[] DesiredLightDiagram { get; private set; } // Array of . and # characters | . = off, # = on | This represents the desired pattern | Default is all off
+  public int ButtonCount { get; private set; } // Number of buttons on the machine
+  public int[][] ButtonWiringSchematics { get; private set; } // Array which indicates which lights each button toggles
+  public int[] JoltageRequirements { get; private set; } // Not needed for part one, but included for completeness
+  public List<int> ButtonHistory { get; private set; } // History of button presses
 
   public Machine(char[] initialLightDiagram, char[] desiredLightDiagram, int[][] buttonWiringSchematics, int[] joltageRequirements)
   {
-    this.initialLightDiagram = initialLightDiagram;
-    this.currentLightDiagram = initialLightDiagram;
-    this.desiredLightDiagram = desiredLightDiagram;
-    this.buttonWiringSchematics = buttonWiringSchematics;
-    this.joltageRequirements = joltageRequirements;
-    this.buttonCount = buttonWiringSchematics.Length;
+    InitialLightDiagram = initialLightDiagram;
+    CurrentLightDiagram = initialLightDiagram;
+    DesiredLightDiagram = desiredLightDiagram;
+    ButtonWiringSchematics = buttonWiringSchematics;
+    JoltageRequirements = joltageRequirements;
+    ButtonCount = buttonWiringSchematics.Length;
+    ButtonHistory = new List<int>();
   }
 
   public void FindMatchingCombination()
@@ -31,16 +33,16 @@ public class Machine
 
   public void PressButton(int buttonIndex)
   {
-    var wiringSchematic = buttonWiringSchematics[buttonIndex];
+    var wiringSchematic = ButtonWiringSchematics[buttonIndex];
     foreach (var lightIndex in wiringSchematic) // Loop through each light that this button toggles
     {
-      currentLightDiagram[lightIndex] = currentLightDiagram[lightIndex] == '#' ? '.' : '#'; // Toggle the light
+      CurrentLightDiagram[lightIndex] = CurrentLightDiagram[lightIndex] == '#' ? '.' : '#'; // Toggle the light
     }
   }
 
   public void CheckLightDiagram()
   {
-    if (new string(currentLightDiagram) == new string(desiredLightDiagram))
+    if (new string(CurrentLightDiagram) == new string(DesiredLightDiagram))
     {
       Console.WriteLine("Desired light diagram achieved!");
     }
@@ -52,6 +54,6 @@ public class Machine
 
   public void ResetMachine()
   {
-    currentLightDiagram = initialLightDiagram;
+    CurrentLightDiagram = InitialLightDiagram;
   }
 }
