@@ -54,7 +54,7 @@ public class Factory
       Console.WriteLine("Machine Details:");
       Console.WriteLine($"  Initial Light Diagram: {machine.InitialLightDiagram}");
       Console.WriteLine($"  Desired Light Diagram: {machine.DesiredLightDiagram}");
-      Console.WriteLine($"  Button Count: {machine.ButtonCount}");
+      Console.WriteLine($"  Button Count: {machine.ButtonCount}"); 
       Console.WriteLine($"  Button Wiring Schematics:");
       foreach (var buttonWiring in machine.ButtonWiringSchematics)
       {
@@ -62,6 +62,9 @@ public class Factory
       }
       Console.WriteLine($"  Joltage Requirements: {string.Join(", ", machine.JoltageRequirements)}");
       Console.WriteLine(); // Blank line for better readability between machines
+
+      machine.PressButton(0); // Example: Press the first button
+      Console.WriteLine($"  Current Light Diagram after pressing button 0: {machine.CurrentLightDiagram}");
     }
   }
 }
