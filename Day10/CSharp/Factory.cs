@@ -18,32 +18,30 @@ public class Factory
     foreach (var line in _inputLines)
     {
       var parts = line.Split(" ");
-      var lightDiagram = Array.Empty<char>();
-      var wiringSchematics = Array.Empty<int[]>();
+      var initialLightDiagram = Array.Empty<char>();
+      var desiredLightDiagram = Array.Empty<char>();
+      var buttonWiringSchematics = Array.Empty<int[]>();
       var joltageRequirements = Array.Empty<int>();
       foreach (var part in parts)
       {
         if (part.Contains("["))
         {
-          lightDiagram = part.Trim('[', ']').ToCharArray();
-          // Console.WriteLine($"Light Diagram: {new string(lightDiagram)}, Type: {lightDiagram.GetType()}"); // Debug line to check output and type
+          initialLightDiagram = part.Trim('[', ']').Replace("#", ".").ToCharArray();
+          desiredLightDiagram = part.Trim('[', ']').ToCharArray();
         }
 
         if (part.Contains("("))
         {
-          var wiringSchematic = part.Trim('(', ')').Split(',').Select(s => int.Parse(s)).ToArray();
-          wiringSchematics = wiringSchematics.Append(wiringSchematic).ToArray();
-          // Console.WriteLine($"Wiring Schematics: {string.Join(", ", wiringSchematic)}, Type: {wiringSchematic.GetType()}"); // Debug line to check output and type
+          var buttonWiringSchematic = part.Trim('(', ')').Split(',').Select(s => int.Parse(s)).ToArray();
+          buttonWiringSchematics = buttonWiringSchematics.Append(buttonWiringSchematic).ToArray();
         }
 
         if (part.Contains("{"))
         {
           joltageRequirements = part.Trim('{', '}').Split(',').Select(s => int.Parse(s)).ToArray();
-          // Console.WriteLine($"Joltage Requirements: {string.Join(", ", joltageRequirement)}, Type: {joltageRequirement.GetType()}"); // Debug line to check output and type
         }
       }
-      // Console.WriteLine($"Parsed Machine - Light Diagram: {new string(lightDiagram)}, Wiring Schematics Count: {wiringSchematics.Length}, Joltage Requirements: {string.Join(", ", joltageRequirement)}"); // Debug line to check parsed values
-      var machine = new Machine(lightDiagram, wiringSchematics, joltageRequirements);
+      var machine = new Machine(initialLightDiagram, desiredLightDiagram, buttonWiringSchematics, joltageRequirements);
       machines.Add(machine);
     }
     return machines;
@@ -54,11 +52,13 @@ public class Factory
     foreach (var machine in _machineList)
     {
       Console.WriteLine("Machine Details:");
-      Console.WriteLine($"  Light Diagram: {machine.LightDiagram}");
-      Console.WriteLine("  Wiring Schematics:");
-      foreach (var wiring in machine.WiringSchematics)
+      Console.WriteLine($"  Initial Light Diagram: {machine.InitialLightDiagram}");
+      Console.WriteLine($"  Desired Light Diagram: {machine.DesiredLightDiagram}");
+      Console.WriteLine($"  Button Count: {machine.ButtonCount}");
+      Console.WriteLine($"  Button Wiring Schematics:");
+      foreach (var buttonWiring in machine.ButtonWiringSchematics)
       {
-        Console.WriteLine($"    - {string.Join(", ", wiring)}");
+        Console.WriteLine($"    - {string.Join(", ", buttonWiring)}");
       }
       Console.WriteLine($"  Joltage Requirements: {string.Join(", ", machine.JoltageRequirements)}");
       Console.WriteLine(); // Blank line for better readability between machines

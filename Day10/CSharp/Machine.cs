@@ -2,18 +2,24 @@ namespace Day10;
 
 public class Machine
 {
-  private char[] _lightDiagram;
-  private int[][] _wiringSchematics;
+  private char[] _initialLightDiagram; // Array of . and # characters | . = off, # = on | This represents the initial pattern
+  private char[] _desiredLightDiagram; // Array of . and # characters | . = off, # = on | This represents the desired pattern | Default is all off
+  private int _buttonCount;
+  private int[][] _buttonWiringSchematics;
   private int[] _joltageRequirements;
 
-  public string LightDiagram => new string(_lightDiagram);
-  public int[][] WiringSchematics => _wiringSchematics;
+  public string InitialLightDiagram => new string(_initialLightDiagram);
+  public string DesiredLightDiagram => new string(_desiredLightDiagram);
+  public int ButtonCount => _buttonCount;
+  public int[][] ButtonWiringSchematics => _buttonWiringSchematics;
   public int[] JoltageRequirements => _joltageRequirements;
 
-  public Machine(char[] lightDiagram, int[][] wiringSchematics, int[] joltageRequirements)
+  public Machine(char[] initialLightDiagram, char[] desiredLightDiagram, int[][] buttonWiringSchematics, int[] joltageRequirements)
   {
-      _lightDiagram = lightDiagram;
-      _wiringSchematics = wiringSchematics;
+      _initialLightDiagram = initialLightDiagram;
+      _desiredLightDiagram = desiredLightDiagram;
+      _buttonCount = buttonWiringSchematics.Length;
+      _buttonWiringSchematics = buttonWiringSchematics;
       _joltageRequirements = joltageRequirements;
   }
 }
