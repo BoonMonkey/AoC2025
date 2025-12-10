@@ -52,19 +52,19 @@ public class Factory
     foreach (var machine in _machineList)
     {
       Console.WriteLine("Machine Details:");
-      Console.WriteLine($"  Initial Light Diagram: {machine.InitialLightDiagram}");
-      Console.WriteLine($"  Desired Light Diagram: {machine.DesiredLightDiagram}");
-      Console.WriteLine($"  Button Count: {machine.ButtonCount}"); 
+      Console.WriteLine($"  Initial Light Diagram: {new string(machine.initialLightDiagram)}");
+      Console.WriteLine($"  Desired Light Diagram: {new string(machine.desiredLightDiagram)}");
+      Console.WriteLine($"  Button Count: {machine.buttonCount}"); 
       Console.WriteLine($"  Button Wiring Schematics:");
-      foreach (var buttonWiring in machine.ButtonWiringSchematics)
+      foreach (var buttonWiring in machine.buttonWiringSchematics)
       {
         Console.WriteLine($"    - {string.Join(", ", buttonWiring)}");
       }
-      Console.WriteLine($"  Joltage Requirements: {string.Join(", ", machine.JoltageRequirements)}");
+      Console.WriteLine($"  Joltage Requirements: {string.Join(", ", machine.joltageRequirements)}");
       Console.WriteLine(); // Blank line for better readability between machines
 
-      machine.PressButton(0); // Example: Press the first button
-      Console.WriteLine($"  Current Light Diagram after pressing button 0: {machine.CurrentLightDiagram}");
+      machine.FindMatchingCombination();
+      Console.WriteLine($"  Current Light Diagram after matching: {new string(machine.currentLightDiagram)}");
     }
   }
 }
